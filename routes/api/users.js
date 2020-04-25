@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
-const User = require('../../models/Users')
+const User = require('../../models/User')
 
 
 // @route POST api/users
@@ -27,7 +27,7 @@ router.post('/',
 ], async (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
-        res.status(400).json({errors: errors.array()})
+        return res.status(400).json({errors: errors.array()})
     }
 
     const { name, email, password } = req.body;
