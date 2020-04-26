@@ -1,4 +1,0 @@
-{
-    "mongoURI": "mongodb+srv://fandrade:holismundo2333@mern-app-h8gaj.mongodb.net/test?retryWrites=true&w=majority",
-    "jwtSecret": "sk1jd92ls"
-}
