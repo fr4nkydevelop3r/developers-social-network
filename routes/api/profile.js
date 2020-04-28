@@ -7,6 +7,7 @@ const axios = require('axios');
 const config = require('config');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 // @route GET api/profile/me
 // @desc Get current user profile
@@ -16,15 +17,18 @@ router.get('/me', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.user.id,
-    }).populate('user', ['name', 'avatar']);
+    });
+
     if (!profile) {
       return res
         .status(400)
         .json({ msg: 'There is no profile for this user' });
     }
-    res.json(profile);
-  } catch (e) {
-    console.error(e.message);
+
+    // only populate from user document if profile exists
+    res.json(profile.populate('user', ['name', 'avatar']));
+  } catch (err) {
+    console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
@@ -153,6 +157,7 @@ router.get('/user/:user_id', async (req, res) => {
 router.delete('/', auth, async (req, res) => {
   try {
     //@todo - remove users posts
+    await Post.deleteMany({ user: req.user.id });
     // Remove profile
     await Profile.findOneAndRemove({ user: req.user.id });
     // Remove user
